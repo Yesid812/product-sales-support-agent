@@ -14,9 +14,9 @@ class SettingClass:
     #Api-key of the used LLLM in my case GPT or Claude idk yet
     API_KEY = os.getenv("GEMINI_API_KEY", "")
 
-    #Model name of the used LLLM in my case gemini for local dev
-    # I need to switch between models for testing and I don't want to change the code every time
-    MODEL_NAME = os.getenv("LLM_MODEL", "gemini-1.5-flash")
+    # Model name of the used LLM. Use a Gemini model compatible with the current API.
+    # Cambia este valor en .env si necesitas otro modelo.
+    MODEL_NAME = os.getenv("LLM_MODEL", "gemini-2.5-flash")
     llm_provider: str = os.getenv("LLM_PROVIDER", "gemini")
 
     # Backend data section
