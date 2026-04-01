@@ -18,7 +18,7 @@ Interfaz pública (las mismas funciones existen en db/aws.py para cuando tenga l
 import re as re
 import duckdb
 from pathlib import Path
-from config import setting
+from config import settings
 
 
 # Connection to the local DuckDB database, which is in-memory and will be created on the fly
@@ -37,7 +37,7 @@ def _get_con() -> duckdb.DuckDBPyConnection:
 
 def _csv (name: str) -> str:
     """ Get the full path to a CSV file in the data directory. """
-    return str(setting.data_path / f"{name}.csv")
+    return str(settings.data_path / f"{name}.csv")
 
 # Funciones utils para los datos
 
@@ -258,6 +258,39 @@ def get_shipment(order_id: int | str) -> dict | None:
 # PRODUCTS (No Auth required)
 # ─────────────────────────────────────────────
  
+def search_products_by_name(query: str) -> list[dict]:
+    """
+    Busca productos por nombre (búsqueda parcial insensible a mayúsculas).
+    Retorna información pública: precio, stock, garantía.
+    No requiere autenticación.
+
+    Args:
+        query: Texto a buscar en el nombre del producto.
+
+    Returns:
+        Lista de hasta 5 productos activos con precio y stock disponible.
+    """
+    con = _get_con()
+    search_term = f"%{query.lower()}%"
+    rows = con.execute(f"""
+        SELECT
+            p.product_id, p.name, p.price, p.warranty_months,
+            p.return_days, p.free_shipping, p.is_final_sale,
+            COALESCE(s.stock_qty - s.reserved_qty, 0) AS available_stock
+        FROM '{_csv("products")}' p
+        LEFT JOIN '{_csv("stock")}' s ON p.product_id = s.product_id
+        WHERE LOWER(p.name) LIKE ?
+          AND p.is_active = true
+        ORDER BY p.name
+        LIMIT 5
+    """, [search_term]).fetchall()
+
+    cols = ["product_id", "name", "price", "warranty_months",
+            "return_days", "free_shipping", "is_final_sale", "available_stock"]
+
+    return [dict(zip(cols, row)) for row in rows]
+
+
 def get_product_info(product_id: int | str) -> dict | None:
     """
     Retorna info pública de un producto: precio, stock, garantía.

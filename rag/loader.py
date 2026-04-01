@@ -97,7 +97,7 @@ def load_policies() -> list[dict]:
 _cache: list[dict] | None = None
 
 
-def get_polices() -> list[dict]:
+def get_politicies() -> list[dict]:
     """Retorna secciones cacheadas para ahorrar. Carga una sola vez por proceso."""
     global _cache
     if _cache is None:

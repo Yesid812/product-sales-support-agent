@@ -21,7 +21,7 @@ Nota: Intentar con sentence-transformers — la interfaz pública no cambia.
 import re
 import math
 from collections import Counter
-from rag.loader import get_politicas
+from rag.loader import get_politicies
 
 
 # Stopwords en español — palabras a criterio propio que no aportan significado para el ranking
@@ -122,7 +122,7 @@ def search(query: str, top_k: int = 2, min_score: float = 0.1) -> list[dict]:
         secciones = search("cuánto tiempo tengo para devolver")
         # → [{"doc": "devoluciones", "heading": "Plazos para Devoluciones", ...}]
     """
-    politicas = get_politicas()
+    politicas = get_politicies()
     query_tokens = _expand(_tokenize(query))
 
     if not query_tokens:
@@ -152,7 +152,7 @@ def search_for_doc(query: str, doc: str, top_k: int = 2) -> list[dict]:
         doc:      "devoluciones" | "garantia" | "envio"
         top_k:    Máximo de secciones
     """
-    politicas = get_politicas()
+    politicas = get_politicies()
     query_tokens = _tokenize(query)
 
     filtradas = [s for s in politicas if s["doc"] == doc]
