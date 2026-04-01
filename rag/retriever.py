@@ -165,7 +165,7 @@ def search_for_doc(query: str, doc: str, top_k: int = 2) -> list[dict]:
     return scored[:top_k]
 
 
-def formatear_para_prompt(secciones: list[dict]) -> str:
+def format_for_prompt(sections: list[dict]) -> str:
     """
     Convierte las secciones recuperadas en texto listo para el prompt.
 
@@ -178,12 +178,12 @@ def formatear_para_prompt(secciones: list[dict]) -> str:
     Returns:
         Texto formateado con fuente y contenido de cada sección.
     """
-    if not secciones:
+    if not sections:
         return "No se encontró información relevante en las políticas."
 
-    partes = []
-    for sec in secciones:
-        fuente = f"[Política de {sec['doc']} — {sec['heading']}]"
-        partes.append(f"{fuente}\n{sec['content']}")
+    parts = []
+    for sec in sections:
+        origin = f"[Política de {sec['doc']} — {sec['heading']}]"
+        parts.append(f"{origin}\n{sec['content']}")
 
-    return "\n\n---\n\n".join(partes)
+    return "\n\n---\n\n".join(parts)
