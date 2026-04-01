@@ -43,7 +43,7 @@ def search_policy(query: str) -> dict:
         "encontrado": True,
         "contexto": format_for_prompt(results),
         "fuentes": [
-            {"doc": r["doc"], "seccion": r["titulo"], "relevancia": r["score"]}
+            {"doc": r["doc"], "seccion": r["heading"], "relevancia": r["_score"]}
             for r in results
         ]
     }
