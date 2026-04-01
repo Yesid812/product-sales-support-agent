@@ -1,5 +1,5 @@
 import os 
-from importlib import Path 
+from pathlib  import Path 
 from dotenv import load_dotenv
 
 #Load variables from .env file whether it exists
@@ -58,7 +58,7 @@ class SettingClass:
             "file or set it as an environment variable")
         
 
-        if self.llm_provider == "gemini" and not self.gemini_api_key:
+        if self.llm_provider == "gemini" and not self.API_KEY:
             raise ValueError("GEMINI_API_KEY no está configurada.")
         
         # This is for the local dev
@@ -70,5 +70,5 @@ class SettingClass:
             raise ValueError(f"POLICIES_PATH {self.policies_path} does not exist. "\
             "Please add it to the .env file or set it as an environment variable")
         
-# Only this instance to import all project data        
-setting = SettingClass()
+# Only this instance to import all project settings   
+settings = SettingClass()
