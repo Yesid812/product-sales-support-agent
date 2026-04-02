@@ -93,7 +93,7 @@ def verify_customer(dni: str = None, phone: str = None) -> dict | None:
     if phone:
         # Get customer by normalized phone number
         # Get all customers and compare normalized phone numbers using Python
-        phone_normalizado = normalize_phone(phone)
+        normalized_phone = normalize_phone(phone)
  
         rows = con.execute(f"""
             SELECT customer_id, tipo_id, dni, name, last_name1, last_name2,
@@ -106,7 +106,9 @@ def verify_customer(dni: str = None, phone: str = None) -> dict | None:
  
         for row in rows:
             customer = dict(zip(cols, row))
-            if normalize_phone(customer["phone"]) == phone_normalizado:
+            stored = normalize_phone(customer["phone"])
+            # Comparar por sufijo: 3210988516 coincide con 573210988516
+            if stored == normalized_phone or stored.endswith(normalized_phone):
                 return customer
  
     return None
