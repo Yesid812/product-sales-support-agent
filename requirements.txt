@@ -1,0 +1,14 @@
+# LLM
+anthropic>=0.25.0       # SDK de Claude — alternativa gratuita a Bedrock
+
+# Base de datos local (reemplaza Athena)
+duckdb>=0.10.0
+
+# Datos
+pandas>=2.0.0
+
+# RAG básico (sin servidor)
+scikit-learn>=1.4.0     # TF-IDF para ranking de secciones
+
+# Utils
+python-dotenv>=1.0.0    # para leer .env
