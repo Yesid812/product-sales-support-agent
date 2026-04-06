@@ -141,7 +141,7 @@ Copia `.env.example` a `.env` y completa los valores:
 ```bash
 # Proveedor LLM
 GEMINI_API_KEY=tu-clave-aqui
-LLM_MODEL=gemini-1.5-flash
+LLM_MODEL=gemini-2.5-flash
 LLM_TEMPERATURE=0
 
 # Backend de datos
@@ -230,17 +230,12 @@ nuevas_llamadas = get_tool_trace_since(before)
 
 | Componente | Tecnología | Alternativa AWS |
 |-----------|------------|-----------------|
-| LLM | Gemini 1.5 Flash | Amazon Bedrock |
+| LLM | Gemini 2.5 Flash | Amazon Bedrock |
 | Base de datos | DuckDB (local) | Amazon Athena |
 | Almacenamiento | CSVs locales | Amazon S3 |
 | RAG | TF-IDF (scikit-learn) | Amazon Kendra |
 | Estado de sesión | Variables globales Python | — |
 
----
-
-## Equipo
-
-Desarrollado por estudiantes de la **Universidad del Cauca** para el desafío Strata Analytics × AWS × GICO.
 
 ---
 
