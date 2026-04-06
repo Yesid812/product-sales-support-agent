@@ -226,19 +226,6 @@ nuevas_llamadas = get_tool_trace_since(before)
 
 ---
 
-## Criterios de Evaluación
-
-| Criterio | Peso | Implementación |
-|----------|:----:|----------------|
-| Seguridad y control de acceso | 25% | Gate de autenticación + resistencia a prompt injection |
-| Anti-alucinación | 25% | `add_tool_trace()` en cada herramienta + regla en system prompt |
-| Lógica de negocio y routing | 20% | 5 ramas en system prompt + árbol de decisión |
-| RAG y memoria conversacional | 20% | TF-IDF sobre secciones Markdown + historial con ventana deslizante |
-| Tiempo de respuesta (TTFT) | — | Historial recortado a 10 turnos + modelo Flash |
-| Presentación oral | 10% | — |
-
----
-
 ## Stack Tecnológico
 
 | Componente | Tecnología | Alternativa AWS |
