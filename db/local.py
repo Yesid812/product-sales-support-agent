@@ -27,6 +27,14 @@ from config import settings
 
 _conn : duckdb.DuckDBPyConnection | None = None
 
+def _serialize(value):
+    from datetime import date, datetime
+    if isinstance(value, (date, datetime)):
+        return str(value)
+    return value
+def _row_to_dict(cols: list, row: tuple) -> dict:
+    return {k: _serialize(v) for k, v in zip(cols, row)}
+
 def _get_con() -> duckdb.DuckDBPyConnection:
     """ Get the DuckDB connection, creating it if it doesn't exist. """
     global _conn
@@ -88,7 +96,7 @@ def verify_customer(dni: str = None, phone: str = None) -> dict | None:
         if result:
             cols = ["customer_id", "tipo_id", "dni", "name", "last_name1",
                     "last_name2", "phone", "account_status", "is_premium"]
-            return dict(zip(cols, result))
+            return _row_to_dict(cols, result)
  
     if phone:
         # Get customer by normalized phone number
@@ -105,7 +113,7 @@ def verify_customer(dni: str = None, phone: str = None) -> dict | None:
                 "last_name2", "phone", "account_status", "is_premium"]
  
         for row in rows:
-            customer = dict(zip(cols, row))
+            customer = _row_to_dict(cols, row)
             stored = normalize_phone(customer["phone"])
             # Comparar por sufijo: 3210988516 coincide con 573210988516
             if stored == normalized_phone or stored.endswith(normalized_phone):
@@ -141,7 +149,7 @@ def get_orders_by_customer(customer_id: int | str) -> list[dict]:
             "shipping_cost", "total_amount", "delivery_method",
             "payment_method", "shipped_at", "delivered_at", "cancelled_at"]
  
-    return [dict(zip(cols, row)) for row in rows]
+    return [_row_to_dict(cols, row) for row in rows]
  
  
 def get_order_detail(order_id: int | str, customer_id: int | str) -> dict | None:
@@ -182,7 +190,7 @@ def get_order_detail(order_id: int | str, customer_id: int | str) -> dict | None
             "shipped_at", "delivered_at", "cancelled_at",
             "cancellation_reason", "customer_notes"]
  
-    return dict(zip(cols, row))
+    return _row_to_dict(cols, row)
  
  
 def get_order_items(order_id: int | str) -> list[dict]:
@@ -220,7 +228,7 @@ def get_order_items(order_id: int | str) -> list[dict]:
     cols = ["item_id", "product_id", "product_name", "qty",
             "unit_price", "item_status", "warranty_expires_at", "return_deadline"]
  
-    return [dict(zip(cols, row)) for row in rows]
+    return [_row_to_dict(cols, row) for row in rows]
  
  
 def get_shipment(order_id: int | str) -> dict | None:
@@ -253,7 +261,7 @@ def get_shipment(order_id: int | str) -> dict | None:
             "actual_delivery_date", "delivery_attempts",
             "failed_delivery_reason", "shipment_status"]
  
-    return dict(zip(cols, row))
+    return _row_to_dict(cols, row)
  
  
 # ─────────────────────────────────────────────
@@ -290,7 +298,7 @@ def search_products_by_name(query: str) -> list[dict]:
     cols = ["product_id", "name", "price", "warranty_months",
             "return_days", "free_shipping", "is_final_sale", "available_stock"]
 
-    return [dict(zip(cols, row)) for row in rows]
+    return [_row_to_dict(cols, row) for row in rows]
 
 
 def get_product_info(product_id: int | str) -> dict | None:
@@ -318,4 +326,4 @@ def get_product_info(product_id: int | str) -> dict | None:
             "warranty_months", "return_days", "free_shipping",
             "is_active", "available_stock"]
  
-    return dict(zip(cols, row))
+    return _row_to_dict(cols, row)
