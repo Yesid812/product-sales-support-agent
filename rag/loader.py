@@ -89,7 +89,6 @@ def load_policies() -> list[dict]:
         text = route.read_text(encoding="utf-8")
         sections = _segment(text, doc_key)
         all.extend(sections)
-        print(f"[RAG] {doc_key} ({route.name}): {len(sections)} secciones")
 
     return all
 
